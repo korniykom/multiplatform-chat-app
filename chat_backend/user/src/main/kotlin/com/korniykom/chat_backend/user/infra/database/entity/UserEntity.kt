@@ -1,4 +1,4 @@
-package org.korniykom.com.korniykom.chat_backend.user.infra.database.entity
+package com.korniykom.chat_backend.user.infra.database.entity
 
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
@@ -9,8 +9,9 @@ import jakarta.persistence.Index
 import jakarta.persistence.Table
 import org.hibernate.annotations.CreationTimestamp
 import org.hibernate.annotations.UpdateTimestamp
-import org.korniykom.com.korniykom.chat_backend.user.domain.model.UserId
+import com.korniykom.chat_backend.user.domain.model.UserId
 import java.time.Instant
+
 
 @Entity
 @Table(
@@ -21,20 +22,20 @@ import java.time.Instant
         Index(name = "idx_users_username", columnList = "username"),
     ]
 )
-class UserEntity (
+class UserEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     var id: UserId? = null,
     @Column(nullable = false, unique = true)
     var email: String,
     @Column(nullable = false, unique = true)
-    val username: String,
+    var username: String,
+    @Column(nullable = false)
+    var hashedPassword: String,
+    @Column(nullable = false)
+    var hasVerifiedEmail: Boolean = false,
     @CreationTimestamp
     var createdAt: Instant = Instant.now(),
     @UpdateTimestamp
     var updatedAt: Instant = Instant.now(),
-    @Column(nullable = false)
-    var hashedPassword: String,
-    @Column(nullable = false)
-    var hasVerifiedEmail: Boolean = false
-    )
+)
