@@ -13,19 +13,3 @@ class ChatBackendApplication
 fun main(args: Array<String>) {
 	runApplication<ChatBackendApplication>(*args)
 }
-
-@Component
-class Demo(
-    private val repository: UserRepository
-) {
-    @PostConstruct
-    fun init() {
-        repository.save(
-            UserEntity(
-                email = "test",
-                username = "test",
-                hashedPassword = "test",
-            )
-        )
-    }
-}
