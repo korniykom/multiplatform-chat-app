@@ -7,6 +7,6 @@ import org.springframework.stereotype.Component
 class PasswordEncoder {
     private val bcrypt = BCryptPasswordEncoder()
 
-    fun encode(rawPassword: String): String? = bcrypt.encode(rawPassword)
+    fun encode(rawPassword: String): String = bcrypt.encode(rawPassword)!!
     fun matches(rawPassword: String, hashedPassword: String): Boolean = bcrypt.matches(rawPassword, hashedPassword)
 }
