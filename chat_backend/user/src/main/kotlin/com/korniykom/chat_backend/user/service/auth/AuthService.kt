@@ -1,4 +1,4 @@
-package com.korniykom.chat_backend.user.service
+package com.korniykom.chat_backend.user.service.auth
 
 import com.korniykom.chat_backend.user.domain.exception.UserAlreadyExistsException
 import com.korniykom.chat_backend.user.domain.model.User

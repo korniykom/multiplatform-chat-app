@@ -3,7 +3,7 @@ package com.korniykom.chat_backend.user.api.controllers
 import com.korniykom.chat_backend.user.api.dto.RegisterRequest
 import com.korniykom.chat_backend.user.api.dto.UserDto
 import com.korniykom.chat_backend.user.api.mappers.toUserDto
-import com.korniykom.chat_backend.user.service.AuthService
+import com.korniykom.chat_backend.user.service.auth.AuthService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
