@@ -2,6 +2,7 @@ package com.korniykom.chat_backend.user.api.controllers
 
 import com.korniykom.chat_backend.user.api.dto.AuthenticatedUserDto
 import com.korniykom.chat_backend.user.api.dto.LoginRequest
+import com.korniykom.chat_backend.user.api.dto.RefreshRequest
 import com.korniykom.chat_backend.user.api.dto.RegisterRequest
 import com.korniykom.chat_backend.user.api.dto.UserDto
 import com.korniykom.chat_backend.user.api.mappers.toAuthenticatedUserDto
@@ -38,5 +39,14 @@ class AuthController(
             email = body.email,
             password = body.password
         ).toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(
+        @RequestBody body: RefreshRequest
+    ) : AuthenticatedUserDto {
+        return authService
+            .refresh(body.refreshToken)
+            .toAuthenticatedUserDto()
     }
 }

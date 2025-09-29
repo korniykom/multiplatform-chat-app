@@ -2,6 +2,7 @@ package com.korniykom.chat_backend.user.domain.model
 
 import java.util.UUID
 
+
 typealias UserId = UUID
 
 data class User(
