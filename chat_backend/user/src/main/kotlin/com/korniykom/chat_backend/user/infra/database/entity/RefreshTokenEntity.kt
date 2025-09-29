@@ -23,7 +23,7 @@ import java.time.Instant
 class RefreshTokenEntity (
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = 0,
+    var id: Long? = null,
     @Column(nullable = false)
     var userId: UserId,
     @Column(nullable = false)
