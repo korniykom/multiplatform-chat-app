@@ -1,5 +1,6 @@
 package com.korniykom.chat_backend.user.api.exception
 
+import com.korniykom.chat_backend.user.domain.exception.EmailNotVerifiedException
 import com.korniykom.chat_backend.user.domain.exception.InvalidCredentialsException
 import com.korniykom.chat_backend.user.domain.exception.InvalidTokenException
 import com.korniykom.chat_backend.user.domain.exception.UserAlreadyExistsException
@@ -62,4 +63,13 @@ class AuthExceptionHandler {
                 "errors" to errors
             ))
     }
+
+    @ExceptionHandler(EmailNotVerifiedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onEmailNotVerified(
+        e: EmailNotVerifiedException
+    ) = mapOf(
+        "code" to "EMAIL_NOT_VERIFIED",
+        "message" to e.message
+    )
 }
