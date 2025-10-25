@@ -1,4 +1,4 @@
-package com.korniykom.chat_backend.user.service.auth
+package com.korniykom.chat_backend.user.service
 
 import com.korniykom.chat_backend.user.domain.exception.InvalidTokenException
 import com.korniykom.chat_backend.user.domain.exception.UserNotFoundException
@@ -26,21 +26,11 @@ class EmailVerificationService(
     fun createVerificationToken(email: String): EmailVerificationToken {
         var userEntity =  userRepository.findByEmail(email)
             ?: throw UserNotFoundException()
-        val existingTokens = emailVerificationTokenRepository.findByUserAndUsedAtIsNull(
-            user = userEntity
-        )
 
-        val now = Instant.now()
-        val usedTokens = existingTokens.map {
-            it.apply {
-                this.usedAt = now
-            }
-        }
-
-        emailVerificationTokenRepository.saveAll(usedTokens)
+        emailVerificationTokenRepository.invalidateActiveTokensForUser(userEntity)
 
         val token = EmailVerificationTokenEntity(
-            expiresAt = now.plus(expiryHours, ChronoUnit.HOURS),
+            expiresAt = Instant.now().plus(expiryHours, ChronoUnit.HOURS),
             user = userEntity,
         )
 

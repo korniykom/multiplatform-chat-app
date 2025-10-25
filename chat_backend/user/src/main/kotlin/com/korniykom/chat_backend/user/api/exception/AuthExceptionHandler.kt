@@ -3,6 +3,7 @@ package com.korniykom.chat_backend.user.api.exception
 import com.korniykom.chat_backend.user.domain.exception.EmailNotVerifiedException
 import com.korniykom.chat_backend.user.domain.exception.InvalidCredentialsException
 import com.korniykom.chat_backend.user.domain.exception.InvalidTokenException
+import com.korniykom.chat_backend.user.domain.exception.SamePasswordException
 import com.korniykom.chat_backend.user.domain.exception.UserAlreadyExistsException
 import com.korniykom.chat_backend.user.domain.exception.UserNotFoundException
 import org.springframework.http.HttpStatus
@@ -21,6 +22,15 @@ class AuthExceptionHandler {
         e: UserNotFoundException
     ) = mapOf(
         "code" to "USER_NOT_FOUND",
+        "message" to e.message
+    )
+
+    @ExceptionHandler(SamePasswordException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun onSamePassword(
+        e: UserNotFoundException
+    ) = mapOf(
+        "code" to "SAME_PASSWORD",
         "message" to e.message
     )
 

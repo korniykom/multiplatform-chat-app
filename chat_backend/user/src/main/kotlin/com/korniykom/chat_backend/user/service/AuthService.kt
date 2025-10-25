@@ -1,4 +1,4 @@
-package com.korniykom.chat_backend.user.service.auth
+package com.korniykom.chat_backend.user.service
 
 import com.korniykom.chat_backend.user.domain.exception.EmailNotVerifiedException
 import com.korniykom.chat_backend.user.domain.exception.InvalidCredentialsException
