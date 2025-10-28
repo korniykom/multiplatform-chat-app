@@ -1,11 +1,14 @@
+server:
+  port: 1337
+
 spring:
   application:
-    name: chirp
+    name: chat_backend
 
   datasource:
-    url: ${CONNECTING_URL}
-    username: ${POSTGRES_USERNAME}
-    password: ${POSTGRES_PASSWORD}
+    url: "jdbc:postgresql://localhost:5432/auth_database"
+    username: "max"
+    password: "password"
     driver-class-name: org.postgresql.Driver
 
     hikari:
@@ -40,3 +43,10 @@ email:
     expiry-hours: 24
   reset-password:
     expiry-minutes: 30
+
+data:
+  redis:
+    host: "localhost"
+    port: "6379"
+    connect-timeout: 5000ms
+    timeout: 2000ms

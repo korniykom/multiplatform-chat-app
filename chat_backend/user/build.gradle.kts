@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.jwt.api)
 
     implementation(libs.spring.boot.starter.data.jpa)
+    implementation(libs.spring.boot.starter.redis)
     runtimeOnly(libs.postgresql)
     runtimeOnly(libs.jwt.impl)
     runtimeOnly(libs.jwt.jackson)

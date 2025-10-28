@@ -69,4 +69,8 @@ class EmailVerificationService(
             now = Instant.now()
         )
     }
+
+    fun resendVerificationEmail(email: String) {
+        //TODO trigger resend
+    }
 }

@@ -3,6 +3,7 @@ package com.korniykom.chat_backend.user.api.exception
 import com.korniykom.chat_backend.user.domain.exception.EmailNotVerifiedException
 import com.korniykom.chat_backend.user.domain.exception.InvalidCredentialsException
 import com.korniykom.chat_backend.user.domain.exception.InvalidTokenException
+import com.korniykom.chat_backend.user.domain.exception.RateLimitException
 import com.korniykom.chat_backend.user.domain.exception.SamePasswordException
 import com.korniykom.chat_backend.user.domain.exception.UserAlreadyExistsException
 import com.korniykom.chat_backend.user.domain.exception.UserNotFoundException
@@ -80,6 +81,15 @@ class AuthExceptionHandler {
         e: EmailNotVerifiedException
     ) = mapOf(
         "code" to "EMAIL_NOT_VERIFIED",
+        "message" to e.message
+    )
+
+    @ExceptionHandler(RateLimitException::class)
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    fun onEmailRateLimitExceeded(
+        e: RateLimitException
+    ) = mapOf(
+        "code" to "RATE_LIMIT_EXCEEDED",
         "message" to e.message
     )
 }
