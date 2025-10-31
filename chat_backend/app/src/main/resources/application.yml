@@ -35,7 +35,7 @@ spring:
         show_sql: true
 
 jwt:
-  secret: ${JWT_SECRET_BASE64}
+  secret: "PSbBLHwCd06Wgbv8LhKedSWRoPMv8rtmlvcEJLVo/5J0/CLUHLvNTl31lMzrDhOkgLG6HJPb1GUiOHNAjC7W3A=="
   expiration-minutes: 150
 
 email:
@@ -50,3 +50,11 @@ data:
     port: "6379"
     connect-timeout: 5000ms
     timeout: 2000ms
+
+nginx:
+  require-proxy: true
+  trusted-ips:
+    - "127.0.0.1"
+    - "::1"
+    - "172.17.0.0/16"
+    - "10.0.0.5/32"

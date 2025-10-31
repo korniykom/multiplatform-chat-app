@@ -23,5 +23,5 @@ services:
       - ./init/:/docker-entrypoint-initdb.d
 
 volumes:
-  chat_backend_redis_data:
+  chat_backend_redis:
   auth_database:

@@ -2,3 +2,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: validate
+
+
+nginx:
+  required-proxy: true
+
+rate-limit:
+  ip:
+    apply-limit: true

@@ -2,3 +2,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+nginx:
+  required-proxy: false
+
+rate-limit:
+  ip:
+    apply-limit: false
