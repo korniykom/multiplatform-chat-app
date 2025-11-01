@@ -4,17 +4,22 @@ import com.korniykom.chat_backend.user.api.config.IpRateLimit
 import com.korniykom.chat_backend.user.api.dto.*
 import com.korniykom.chat_backend.user.api.mappers.toAuthenticatedUserDto
 import com.korniykom.chat_backend.user.api.mappers.toUserDto
+import com.korniykom.chat_backend.user.api.util.requestUserId
+import com.korniykom.chat_backend.user.domain.model.UserId
 import com.korniykom.chat_backend.user.infra.rate_limiting.EmailRateLimiter
 import com.korniykom.chat_backend.user.service.AuthService
 import com.korniykom.chat_backend.user.service.EmailVerificationService
+import com.korniykom.chat_backend.user.service.JwtService
 import com.korniykom.chat_backend.user.service.PasswordResetService
 import jakarta.validation.Valid
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import java.util.concurrent.TimeUnit
 
 @RestController
 @RequestMapping("/api/auth")
 class AuthController(
+    private val jwtService: JwtService,
     private val authService: AuthService,
     private val emailVerificationService: EmailVerificationService,
     private val passwordResetService: PasswordResetService,
@@ -82,9 +87,17 @@ class AuthController(
 
     @PostMapping("change-password")
     fun changePassword(
+        @RequestHeader("Authorization") authorizationHeader: String,
         @Valid @RequestBody body: ChangePasswordRequest
     ) {
-       // TODO extract userid and call service
+        val token = authorizationHeader.removePrefix("Bearer ").trim()
+        val userId = jwtService.getUserIdFromToken(token)
+
+        passwordResetService.changePassword(
+            userId = userId,
+            oldPassword = body.oldPassword,
+            newPassword = body.newPassword
+        )
     }
 
     @PostMapping("forgot-password")

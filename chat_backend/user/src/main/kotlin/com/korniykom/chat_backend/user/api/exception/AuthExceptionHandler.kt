@@ -5,6 +5,7 @@ import com.korniykom.chat_backend.user.domain.exception.InvalidCredentialsExcept
 import com.korniykom.chat_backend.user.domain.exception.InvalidTokenException
 import com.korniykom.chat_backend.user.domain.exception.RateLimitException
 import com.korniykom.chat_backend.user.domain.exception.SamePasswordException
+import com.korniykom.chat_backend.user.domain.exception.UnauthorizedException
 import com.korniykom.chat_backend.user.domain.exception.UserAlreadyExistsException
 import com.korniykom.chat_backend.user.domain.exception.UserNotFoundException
 import org.springframework.http.HttpStatus
@@ -90,6 +91,15 @@ class AuthExceptionHandler {
         e: RateLimitException
     ) = mapOf(
         "code" to "RATE_LIMIT_EXCEEDED",
+        "message" to e.message
+    )
+
+    @ExceptionHandler(UnauthorizedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onUnauthorized(
+        e: UnauthorizedException
+    ) = mapOf(
+        "code" to "UNAUTHORIZED",
         "message" to e.message
     )
 }
