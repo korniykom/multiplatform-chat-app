@@ -1,9 +1,5 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.spring)
-    alias(libs.plugins.spring.boot)
-    alias(libs.plugins.spring.dependency.management)
-    alias(libs.plugins.kotlin.jpa)
+    id("kotlin-chat.spring-boot-app")
 }
 
 group = "com.korniykom"
@@ -21,6 +17,10 @@ repositories {
 }
 
 dependencies {
+    implementation(projects.user)
+    implementation(projects.chat)
+    implementation(projects.notification)
+    implementation(projects.common)
 	implementation("org.springframework.boot:spring-boot-starter")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")

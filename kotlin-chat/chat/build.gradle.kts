@@ -1,9 +1,7 @@
 plugins {
-    alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.kotlin.spring)
-    alias(libs.plugins.spring.boot)
-    alias(libs.plugins.spring.dependency.management)
-    alias(libs.plugins.kotlin.jpa)
+    id("java-library")
+    id("kotlin-chat.spring-boot-service")
+        alias(libs.plugins.kotlin.jpa)
 }
 
 group = "com.korniykom"
@@ -14,6 +12,7 @@ repositories {
 }
 
 dependencies {
+    implementation(projects.common)
     testImplementation(kotlin("test"))
 }
 
@@ -21,5 +20,5 @@ tasks.test {
     useJUnitPlatform()
 }
 kotlin {
-    jvmToolchain(24)
+    jvmToolchain(21)
 }
