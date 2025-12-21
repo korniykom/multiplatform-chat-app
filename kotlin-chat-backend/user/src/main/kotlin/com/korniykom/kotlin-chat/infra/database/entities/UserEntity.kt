@@ -1,0 +1,32 @@
+package com.korniykom.kotlin_chat.infra.database.entities
+
+import com.korniykom.kotlin_chat.domain.model.UserId
+import jakarta.persistence.*
+import org.hibernate.annotations.CreationTimestamp
+import java.time.Instant
+
+@Entity
+@Table(
+    name = "users",
+    schema = "user_service",
+    indexes = [
+        Index(name = "idx_users_email", columnList = "email"),
+        Index(name = "idx_users_username", columnList = "username")
+    ]
+)
+class UserEntity(
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    var id: UserId? = null,
+    @Column(nullable = false, unique = true)
+    var email: String,
+    @Column(nullable = false, unique = true)
+    var username: String,
+    @CreationTimestamp
+    var createdAt: Instant = Instant.now(),
+    @Column(nullable = false)
+    var hashedPassword: String,
+    @Column(nullable = false)
+    var hasVerifiedEmail: Boolean = false
+) {
+}

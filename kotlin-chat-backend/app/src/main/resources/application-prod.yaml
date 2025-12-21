@@ -1,0 +1,4 @@
+sparing:
+  jpa:
+    hibernate:
+      ddl-auto: validate

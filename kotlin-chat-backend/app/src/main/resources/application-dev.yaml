@@ -1,0 +1,6 @@
+sparing:
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate.default_schema: user_service
