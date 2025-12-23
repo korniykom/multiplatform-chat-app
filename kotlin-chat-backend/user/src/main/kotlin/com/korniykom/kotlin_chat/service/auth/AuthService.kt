@@ -1,6 +1,6 @@
 package com.korniykom.kotlin_chat.service.auth
 
-import com.korniykom.kotlin_chat.domain.exception.UserAlreadyExists
+import com.korniykom.kotlin_chat.domain.exception.UserAlreadyExistsException
 import com.korniykom.kotlin_chat.domain.model.User
 import com.korniykom.kotlin_chat.infra.database.entities.UserEntity
 import com.korniykom.kotlin_chat.infra.database.repositories.UserRepository
@@ -17,7 +17,7 @@ class AuthService(
         val user = userRepository.findByEmailOrUsername(email.trim(), username.trim())
 
         if(user != null) {
-            throw UserAlreadyExists()
+            throw UserAlreadyExistsException()
         }
 
         val savedUser = userRepository.save(

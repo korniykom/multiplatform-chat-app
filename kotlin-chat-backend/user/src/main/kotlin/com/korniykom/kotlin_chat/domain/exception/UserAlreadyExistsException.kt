@@ -1,5 +1,5 @@
 package com.korniykom.kotlin_chat.domain.exception
 
-class UserAlreadyExists: RuntimeException(
+class UserAlreadyExistsException: RuntimeException(
     "A user already exists"
 )
