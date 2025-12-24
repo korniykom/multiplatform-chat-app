@@ -1,5 +1,6 @@
 package com.korniykom.kotlin_chat.api.exception_handling
 
+import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.UserAlreadyExistsException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -7,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import javax.management.modelmbean.InvalidTargetObjectTypeException
 
 @RestControllerAdvice
 class AuthExceptionHandler {
@@ -18,6 +20,13 @@ class AuthExceptionHandler {
         "code" to "USER_EXISTS", "message" to e.message
     )
 
+    @ExceptionHandler(InvalidTokenException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onInvalidToken(
+        e: InvalidTokenException
+    ) = mapOf(
+        "code" to "INVALID_TOKEN", "message" to e.message
+    )
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun onValidationException(e: MethodArgumentNotValidException): ResponseEntity<Map<String, Any>> {
