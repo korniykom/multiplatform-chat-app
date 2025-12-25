@@ -1,4 +1,4 @@
-sparing:
+spring:
   jpa:
     hibernate:
       ddl-auto: update
