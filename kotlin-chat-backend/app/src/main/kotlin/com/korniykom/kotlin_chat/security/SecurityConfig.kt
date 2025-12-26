@@ -1,7 +1,6 @@
 package com.korniykom.kotlin_chat.security
 
 import jakarta.servlet.DispatcherType
-import org.apache.tomcat.util.net.DispatchType
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.HttpStatus

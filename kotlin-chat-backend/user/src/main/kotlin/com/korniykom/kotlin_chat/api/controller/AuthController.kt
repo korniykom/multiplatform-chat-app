@@ -1,7 +1,10 @@
 package com.korniykom.kotlin_chat.api.controller
 
+import com.korniykom.kotlin_chat.api.dto.AuthenticatedUserDto
+import com.korniykom.kotlin_chat.api.dto.LoginRequest
 import com.korniykom.kotlin_chat.api.dto.RegisterRequest
 import com.korniykom.kotlin_chat.api.dto.UserDto
+import com.korniykom.kotlin_chat.api.mappers.toAuthenticatedUserDto
 import com.korniykom.kotlin_chat.api.mappers.toUserDto
 import com.korniykom.kotlin_chat.service.auth.AuthService
 import jakarta.validation.Valid
@@ -21,8 +24,19 @@ class AuthController(
     ): UserDto {
         return authService.register(
             username = body.username,
-            email = body.username,
+            email = body.email,
             password = body.password
         ).toUserDto()
+    }
+
+    @PostMapping("/login")
+    fun login(
+        @RequestBody
+        body: LoginRequest
+    ): AuthenticatedUserDto {
+        return authService.login(
+            email = body.email,
+            password = body.password
+        ).toAuthenticatedUserDto()
     }
 }

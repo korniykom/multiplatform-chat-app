@@ -13,7 +13,9 @@ import com.korniykom.kotlin_chat.infra.database.repositories.UserRepository
 import com.korniykom.kotlin_chat.infra.mappers.toUser
 import com.korniykom.kotlin_chat.infra.security.PasswordEncoder
 import org.springframework.stereotype.Service
+import java.security.MessageDigest
 import java.time.Instant
+import java.util.Base64
 
 @Service
 class AuthService(
@@ -27,7 +29,7 @@ class AuthService(
         password: String
     ): AuthenticatedUser {
         val user = userRepository.findByEmail(email.trim())
-            ?: throw InvalidCredentialException()
+           ?: throw InvalidCredentialException()
 
         if(!passwordEncoder.matches(password, user.hashedPassword)) {
             throw InvalidCredentialException()
@@ -67,19 +69,22 @@ class AuthService(
     }
 
     private fun storeRefreshToken(userId: UserId, token: String) {
-        val hashedToken = passwordEncoder.encode(token)
-        val expiryMs =jwtService.refreshTokenValidityMs
+        val hashed = hashToken(token)
+        val expiryMs = jwtService.refreshTokenValidityMs
         val expiresAt = Instant.now().plusMillis(expiryMs)
 
         refreshTokenRepository.save(
             RefreshTokenEntity(
                 userId = userId,
                 expiresAt = expiresAt,
-                hashedToken = hashedToken,
-
-                
+                hashedToken = hashed
             )
-
         )
+    }
+
+    private fun hashToken(token: String): String {
+        val digest = MessageDigest.getInstance("SHA-256")
+        val hashBytes = digest.digest(token.encodeToByteArray())
+        return Base64.getEncoder().encodeToString(hashBytes)
     }
 }
