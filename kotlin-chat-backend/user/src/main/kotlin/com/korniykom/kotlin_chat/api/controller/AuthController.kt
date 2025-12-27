@@ -2,6 +2,7 @@ package com.korniykom.kotlin_chat.api.controller
 
 import com.korniykom.kotlin_chat.api.dto.AuthenticatedUserDto
 import com.korniykom.kotlin_chat.api.dto.LoginRequest
+import com.korniykom.kotlin_chat.api.dto.RefreshRequest
 import com.korniykom.kotlin_chat.api.dto.RegisterRequest
 import com.korniykom.kotlin_chat.api.dto.UserDto
 import com.korniykom.kotlin_chat.api.mappers.toAuthenticatedUserDto
@@ -38,5 +39,24 @@ class AuthController(
             email = body.email,
             password = body.password
         ).toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/refresh")
+    fun refresh(
+        @RequestBody
+        body: RefreshRequest
+    ): AuthenticatedUserDto {
+        return authService
+            .refresh(body.refreshToken)
+            .toAuthenticatedUserDto()
+    }
+
+    @PostMapping("/logout")
+    fun logout(
+        @RequestBody
+        body: RefreshRequest
+    ) {
+        authService.logout(body.refreshToken)
+
     }
 }
