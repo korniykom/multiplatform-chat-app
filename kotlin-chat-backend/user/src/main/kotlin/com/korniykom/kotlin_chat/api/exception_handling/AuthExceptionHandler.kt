@@ -1,5 +1,6 @@
 package com.korniykom.kotlin_chat.api.exception_handling
 
+import com.korniykom.kotlin_chat.domain.exception.EmailNotVerifiedException
 import com.korniykom.kotlin_chat.domain.exception.InvalidCredentialException
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.UserAlreadyExistsException
@@ -28,6 +29,14 @@ class AuthExceptionHandler {
         e: UserNotFoundException
     ) = mapOf(
         "code" to "USER_NOT_FOUND", "message" to e.message
+    )
+
+    @ExceptionHandler(EmailNotVerifiedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onEmailIsNotVerifiedException(
+        e: EmailNotVerifiedException
+    ) = mapOf(
+        "code" to "EMAIL_NOT_VERIFIED", "message" to e.message
     )
 
     @ExceptionHandler(InvalidCredentialException::class)

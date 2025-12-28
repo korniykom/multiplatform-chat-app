@@ -1,5 +1,6 @@
 package com.korniykom.kotlin_chat.service.auth
 
+import com.korniykom.kotlin_chat.domain.exception.EmailNotVerifiedException
 import com.korniykom.kotlin_chat.domain.exception.InvalidCredentialException
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.UserAlreadyExistsException
@@ -19,13 +20,15 @@ import org.springframework.stereotype.Service
 import java.security.MessageDigest
 import java.time.Instant
 import java.util.Base64
+import kotlin.math.PI
 
 @Service
 class AuthService(
     private val userRepository: UserRepository,
     private val passwordEncoder: PasswordEncoder,
     private val jwtService: JwtService,
-    private val refreshTokenRepository: RefreshTokenRepository
+    private val refreshTokenRepository: RefreshTokenRepository,
+    private val emailVerificationService: EmailVerificationService
 ) {
     fun login(
         email: String,
@@ -37,7 +40,9 @@ class AuthService(
         if(!passwordEncoder.matches(password, user.hashedPassword)) {
             throw InvalidCredentialException()
         }
-        // TODO: check for verified email
+        if(!user.hasVerifiedEmail) {
+            throw EmailNotVerifiedException()
+        }
 
         return user.id?.let { userId ->
             val accessToken = jwtService.generateAccessToken(userId)
@@ -100,21 +105,27 @@ class AuthService(
         )
     }
 
+    @Transactional
     fun register(email: String, username: String, password: String): User {
-        val user = userRepository.findByEmailOrUsername(email.trim(), username.trim())
+        val trimmedEmail = email.trim()
+        val user = userRepository.findByEmailOrUsername(trimmedEmail, username.trim())
 
         if(user != null) {
             throw UserAlreadyExistsException()
         }
 
-        val savedUser = userRepository.save(
+
+        val savedUser = userRepository.saveAndFlush(
             UserEntity(
                 id = null,
-                email = email.trim(),
+                email = trimmedEmail,
                 username = username.trim(),
                 hashedPassword = passwordEncoder.encode(password)
             )
         ).toUser()
+
+        val token = emailVerificationService.createVerificationToken(trimmedEmail)
+
         return savedUser
     }
 

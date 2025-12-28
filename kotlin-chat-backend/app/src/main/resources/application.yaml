@@ -16,3 +16,7 @@ spring:
 jwt:
   secret: M2I4OTA0d3k0dXRldGg3ODg4eWlzZWk3dXQ3eThldGdodWllcmZnaHVmZHZiamh2ZGZuamtld2l1OHVldTkwaG9ob2loOThnaHVuaiBqa3NlaGYwMDl1d2p3cmowOTBqOXd0M2hpaDl3OHQ0ODk=
   expiration-minutes: 15
+
+email:
+  verification:
+    expiry-hours: 24

@@ -1,17 +1,10 @@
 package com.korniykom.kotlin_chat.infra.database.entities
 
 import com.korniykom.kotlin_chat.infra.security.TokenGenerator
-import jakarta.persistence.Column
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.ManyToOne
-import jakarta.persistence.Table
+import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.Instant
+import kotlin.math.exp
 
 @Entity
 @Table(
@@ -27,13 +20,16 @@ class EmailVerificationTokenEntity(
     @Column(nullable = false)
     var expiresAt: Instant,
     @Column(nullable = true)
-    var usedAt: Instant?,
+    var usedAt: Instant? = null,
     @CreationTimestamp
     var createdAt: Instant = Instant.now(),
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     var user: UserEntity
+) {
+    val isUsed: Boolean
+        get() = usedAt != null
 
-
-
-    )
+    val isExpired: Boolean
+        get() = Instant.now() > expiresAt
+}
