@@ -1,21 +1,21 @@
 package com.korniykom.kotlin_chat.infra.database.repositories
 
-import com.korniykom.kotlin_chat.infra.database.entities.EmailVerificationTokenEntity
+import com.korniykom.kotlin_chat.infra.database.entities.PasswordResetTokenEntity
 import com.korniykom.kotlin_chat.infra.database.entities.UserEntity
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Modifying
 import org.springframework.data.jpa.repository.Query
 import java.time.Instant
 
-interface EmailVerificationTokenRepository: JpaRepository<EmailVerificationTokenEntity, Long> {
-    fun findByToken(token: String): EmailVerificationTokenEntity?
-    fun deleteByExpiresAtLessThan(date: Instant)
 
+interface EmailVerificationTokenRepository: JpaRepository<PasswordResetTokenEntity, Long> {
+    fun findByToken(token: String): PasswordResetTokenEntity?
+    fun deleteByExpiresAtLessThan(date: Instant)
     @Modifying
     @Query("""
-        UPDATE EmailVerificationTokenEntity e
-        SET e.usedAt = CURRENT_TIMESTAMP
-        WHERE e.user = :user
+        UPDATE PasswordResetTokenEntity p
+        SET p.usedAt = CURRENT_TIMESTAMP
+        WHERE p.user = :user
     """)
     fun invalidateActiveTokensForUser(user: UserEntity)
 }
