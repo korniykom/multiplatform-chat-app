@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query
 import java.time.Instant
 
 
-interface EmailVerificationTokenRepository: JpaRepository<PasswordResetTokenEntity, Long> {
+interface PasswordResetTokenRepository: JpaRepository<PasswordResetTokenEntity, Long> {
     fun findByToken(token: String): PasswordResetTokenEntity?
     fun deleteByExpiresAtLessThan(date: Instant)
     @Modifying

@@ -1,4 +1,4 @@
-package com.korniykom.kotlin_chat.service.auth
+package com.korniykom.kotlin_chat.service
 
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.UserNotFoundException
@@ -14,7 +14,6 @@ import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import java.time.Instant
 import java.time.temporal.ChronoUnit
-import javax.management.modelmbean.InvalidTargetObjectTypeException
 
 @Service
 class EmailVerificationService(

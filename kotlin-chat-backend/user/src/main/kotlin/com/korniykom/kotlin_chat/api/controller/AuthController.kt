@@ -7,8 +7,8 @@ import com.korniykom.kotlin_chat.api.dto.RegisterRequest
 import com.korniykom.kotlin_chat.api.dto.UserDto
 import com.korniykom.kotlin_chat.api.mappers.toAuthenticatedUserDto
 import com.korniykom.kotlin_chat.api.mappers.toUserDto
-import com.korniykom.kotlin_chat.service.auth.AuthService
-import com.korniykom.kotlin_chat.service.auth.EmailVerificationService
+import com.korniykom.kotlin_chat.service.AuthService
+import com.korniykom.kotlin_chat.service.EmailVerificationService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping

@@ -1,4 +1,4 @@
-package com.korniykom.kotlin_chat.service.auth
+package com.korniykom.kotlin_chat.service
 
 import com.korniykom.kotlin_chat.domain.exception.EmailNotVerifiedException
 import com.korniykom.kotlin_chat.domain.exception.InvalidCredentialException
@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service
 import java.security.MessageDigest
 import java.time.Instant
 import java.util.Base64
-import kotlin.math.PI
 
 @Service
 class AuthService(
