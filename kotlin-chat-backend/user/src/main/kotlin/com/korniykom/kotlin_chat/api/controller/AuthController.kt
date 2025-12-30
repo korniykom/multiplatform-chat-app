@@ -1,5 +1,6 @@
 package com.korniykom.kotlin_chat.api.controller
 
+import com.korniykom.kotlin_chat.api.config.IpRateLimit
 import com.korniykom.kotlin_chat.api.dto.AuthenticatedUserDto
 import com.korniykom.kotlin_chat.api.dto.ChangePasswordRequest
 import com.korniykom.kotlin_chat.api.dto.EmailRequest
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import java.util.concurrent.TimeUnit
 
 @RestController
 @RequestMapping("/api/auth")
@@ -32,6 +34,11 @@ class AuthController(
     private val emailRateLimiter: EmailRateLimiter
 ) {
     @PostMapping("/register")
+    @IpRateLimit(
+        requests = 10,
+        duration = 1L,
+        timeUnit = TimeUnit.HOURS
+    )
     fun register(
         @Valid @RequestBody body: RegisterRequest
     ): UserDto {
@@ -43,6 +50,11 @@ class AuthController(
     }
 
     @PostMapping("/login")
+    @IpRateLimit(
+        requests = 10,
+        duration = 1L,
+        timeUnit = TimeUnit.HOURS
+    )
     fun login(
         @RequestBody
         body: LoginRequest
@@ -54,6 +66,11 @@ class AuthController(
     }
 
     @PostMapping("/refresh")
+    @IpRateLimit(
+        requests = 10,
+        duration = 1L,
+        timeUnit = TimeUnit.HOURS
+    )
     fun refresh(
         @RequestBody
         body: RefreshRequest
@@ -87,6 +104,11 @@ class AuthController(
     }
 
     @PostMapping("/forgot-password")
+    @IpRateLimit(
+        requests = 10,
+        duration = 1L,
+        timeUnit = TimeUnit.HOURS
+    )
     fun forgotPassword(
         @Valid @RequestBody body: EmailRequest
     ) {
@@ -102,6 +124,11 @@ class AuthController(
 
 
     @PostMapping("/resend-verification")
+    @IpRateLimit(
+        requests = 10,
+        duration = 1L,
+        timeUnit = TimeUnit.HOURS
+    )
     fun resendVerification(
         @Valid @RequestBody body: EmailRequest
     ) {

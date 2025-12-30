@@ -4,3 +4,10 @@ spring:
       ddl-auto: update
     properties:
       hibernate.default_schema: user_service
+
+nginx:
+  require-proxy: false
+
+rate-limit:
+  ip:
+    apply-limit: false
