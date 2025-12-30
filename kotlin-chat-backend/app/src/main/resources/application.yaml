@@ -13,6 +13,14 @@ spring:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: true
+
+  data:
+    redis:
+      username: "default"
+      host: localhost
+      port: 7772
+      timeout: 2000
+
 jwt:
   secret: M2I4OTA0d3k0dXRldGg3ODg4eWlzZWk3dXQ3eThldGdodWllcmZnaHVmZHZiamh2ZGZuamtld2l1OHVldTkwaG9ob2loOThnaHVuaiBqa3NlaGYwMDl1d2p3cmowOTBqOXd0M2hpaDl3OHQ0ODk=
   expiration-minutes: 15

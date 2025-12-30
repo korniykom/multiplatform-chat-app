@@ -20,6 +20,7 @@ dependencies {
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.security)
     implementation(libs.kotlin.reflect)
+    implementation(libs.spring.boot.starter.redis)
     runtimeOnly(libs.postgresql)
 
     implementation(projects.user)

@@ -26,6 +26,7 @@ class PasswordResetService(
     private val refreshTokenRepository: RefreshTokenRepository,
     @param:Value("\${email.reset-password.expiry-minutes}") private val expiryMinutes: Long
 ) {
+    @Transactional
     fun requestPasswordReset(email: String) {
         val user = userRepository.findByEmail(email)
             ?: return

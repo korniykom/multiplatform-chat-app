@@ -1,14 +1,19 @@
 package com.korniykom.kotlin_chat.api.controller
 
 import com.korniykom.kotlin_chat.api.dto.AuthenticatedUserDto
+import com.korniykom.kotlin_chat.api.dto.ChangePasswordRequest
+import com.korniykom.kotlin_chat.api.dto.EmailRequest
 import com.korniykom.kotlin_chat.api.dto.LoginRequest
 import com.korniykom.kotlin_chat.api.dto.RefreshRequest
 import com.korniykom.kotlin_chat.api.dto.RegisterRequest
+import com.korniykom.kotlin_chat.api.dto.ResetPasswordRequest
 import com.korniykom.kotlin_chat.api.dto.UserDto
 import com.korniykom.kotlin_chat.api.mappers.toAuthenticatedUserDto
 import com.korniykom.kotlin_chat.api.mappers.toUserDto
+import com.korniykom.kotlin_chat.infra.rate_limiting.EmailRateLimiter
 import com.korniykom.kotlin_chat.service.AuthService
 import com.korniykom.kotlin_chat.service.EmailVerificationService
+import com.korniykom.kotlin_chat.service.PasswordResetService
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -22,6 +27,9 @@ import org.springframework.web.bind.annotation.RestController
 class AuthController(
     private val authService: AuthService,
     private val emailVerificationService: EmailVerificationService,
+    private val passwordRequestService: PasswordResetService,
+    private val passwordResetService: PasswordResetService,
+    private val emailRateLimiter: EmailRateLimiter
 ) {
     @PostMapping("/register")
     fun register(
@@ -69,5 +77,36 @@ class AuthController(
         @RequestParam token: String
     ) {
         emailVerificationService.verifyEmail(token)
+    }
+
+    @PostMapping("/reset-password")
+    fun resetPassword(
+        @Valid @RequestBody body: ResetPasswordRequest
+    ) {
+        passwordRequestService.resetPassword(newPassword = body.newPassword, token = body.token)
+    }
+
+    @PostMapping("/forgot-password")
+    fun forgotPassword(
+        @Valid @RequestBody body: EmailRequest
+    ) {
+        passwordResetService.requestPasswordReset(body.email)
+    }
+
+    @PostMapping("/change-password")
+    fun changePassword(
+        @Valid @RequestBody body: ChangePasswordRequest
+    ) {
+        // TODO Extract user ID and call service
+    }
+
+
+    @PostMapping("/resend-verification")
+    fun resendVerification(
+        @Valid @RequestBody body: EmailRequest
+    ) {
+        emailRateLimiter.withRateLimit(body.email) {
+            emailVerificationService.resendVerificationEmail(body.email)
+        }
     }
 }
