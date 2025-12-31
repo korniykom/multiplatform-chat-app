@@ -17,11 +17,11 @@ class IpRateLimitInterceptor(
     private val ipResolver: IpResolver,
     @param:Value("\${rate-limit.ip.apply-limit}")
     private val applyLimit: Boolean
-): HandlerInterceptor {
+) : HandlerInterceptor {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        if(handler is HandlerMethod && applyLimit) {
+        if (handler is HandlerMethod && applyLimit) {
             val annotation = handler.getMethodAnnotation(IpRateLimit::class.java)
-            if(annotation != null) {
+            if (annotation != null) {
                 val clientIp = ipResolver.getClientIp(request)
 
                 return try {
@@ -34,7 +34,7 @@ class IpRateLimitInterceptor(
                         maxRequestsPerIp = annotation.requests,
                         action = { true }
                     )
-                } catch(e: RateLimitException) {
+                } catch (e: RateLimitException) {
                     response.sendError(429)
                     false
                 }

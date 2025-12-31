@@ -1,10 +1,6 @@
 package com.korniykom.kotlin_chat.service
 
-import com.korniykom.kotlin_chat.domain.exception.EmailNotVerifiedException
-import com.korniykom.kotlin_chat.domain.exception.InvalidCredentialException
-import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
-import com.korniykom.kotlin_chat.domain.exception.UserAlreadyExistsException
-import com.korniykom.kotlin_chat.domain.exception.UserNotFoundException
+import com.korniykom.kotlin_chat.domain.exception.*
 import com.korniykom.kotlin_chat.domain.model.AuthenticatedUser
 import com.korniykom.kotlin_chat.domain.model.User
 import com.korniykom.kotlin_chat.domain.model.UserId
@@ -19,7 +15,7 @@ import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import java.security.MessageDigest
 import java.time.Instant
-import java.util.Base64
+import java.util.*
 
 @Service
 class AuthService(
@@ -34,12 +30,12 @@ class AuthService(
         password: String
     ): AuthenticatedUser {
         val user = userRepository.findByEmail(email.trim())
-           ?: throw InvalidCredentialException()
+            ?: throw InvalidCredentialException()
 
-        if(!passwordEncoder.matches(password, user.hashedPassword)) {
+        if (!passwordEncoder.matches(password, user.hashedPassword)) {
             throw InvalidCredentialException()
         }
-        if(!user.hasVerifiedEmail) {
+        if (!user.hasVerifiedEmail) {
             throw EmailNotVerifiedException()
         }
 
@@ -59,7 +55,7 @@ class AuthService(
 
     @Transactional
     fun refresh(refreshToken: String): AuthenticatedUser {
-        if(!jwtService.validateRefreshToken(refreshToken)) {
+        if (!jwtService.validateRefreshToken(refreshToken)) {
             throw InvalidTokenException(
                 "Invalid refresh token"
             )
@@ -70,7 +66,7 @@ class AuthService(
             ?: throw UserNotFoundException()
 
         val hashed = hashToken(refreshToken)
-        return user.id?.let {userId ->
+        return user.id?.let { userId ->
             refreshTokenRepository.findByUserIdAndHashedToken(
                 userId = userId,
                 hashedToken = hashed
@@ -109,7 +105,7 @@ class AuthService(
         val trimmedEmail = email.trim()
         val user = userRepository.findByEmailOrUsername(trimmedEmail, username.trim())
 
-        if(user != null) {
+        if (user != null) {
             throw UserAlreadyExistsException()
         }
 

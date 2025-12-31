@@ -4,7 +4,6 @@ import com.korniykom.kotlin_chat.infra.security.TokenGenerator
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.Instant
-import kotlin.math.exp
 
 @Entity
 @Table(
@@ -12,7 +11,7 @@ import kotlin.math.exp
     schema = "user_service",
     indexes = [
         Index(
-            name =  "idx_email_verification_token_token",
+            name = "idx_email_verification_token_token",
             columnList = "token"
         )
     ]

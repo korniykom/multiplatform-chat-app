@@ -47,17 +47,17 @@ class PasswordResetService(
         val resetToken = passwordResetTokenRepository.findByToken(token)
             ?: throw InvalidTokenException("Invalid password reset token")
 
-        if(resetToken.isUsed) {
+        if (resetToken.isUsed) {
             throw InvalidTokenException("Reset token is already used")
         }
 
-        if(resetToken.isExpired) {
+        if (resetToken.isExpired) {
             throw InvalidTokenException("Reset token is expired")
         }
 
         val user = resetToken.user
 
-        if(passwordEncoder.matches(newPassword, user.hashedPassword)) {
+        if (passwordEncoder.matches(newPassword, user.hashedPassword)) {
             throw SamePasswordException()
         }
 
@@ -86,11 +86,11 @@ class PasswordResetService(
         val user = userRepository.findByIdOrNull(userId)
             ?: throw UserNotFoundException()
 
-        if(!passwordEncoder.matches(oldPassword, user.hashedPassword)) {
+        if (!passwordEncoder.matches(oldPassword, user.hashedPassword)) {
             throw InvalidCredentialException()
         }
 
-        if(oldPassword == newPassword) {
+        if (oldPassword == newPassword) {
             throw SamePasswordException()
         }
 
@@ -105,6 +105,7 @@ class PasswordResetService(
 
 
     }
+
     @Scheduled(cron = "0 0 3 * * *")
     fun cleanupExpiredTokens() {
         passwordResetTokenRepository.deleteByExpiresAtLessThan(

@@ -1,19 +1,12 @@
 package com.korniykom.kotlin_chat.api.exception_handling
 
-import com.korniykom.kotlin_chat.domain.exception.EmailNotVerifiedException
-import com.korniykom.kotlin_chat.domain.exception.InvalidCredentialException
-import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
-import com.korniykom.kotlin_chat.domain.exception.RateLimitException
-import com.korniykom.kotlin_chat.domain.exception.SamePasswordException
-import com.korniykom.kotlin_chat.domain.exception.UserAlreadyExistsException
-import com.korniykom.kotlin_chat.domain.exception.UserNotFoundException
+import com.korniykom.kotlin_chat.domain.exception.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestControllerAdvice
-import javax.management.modelmbean.InvalidTargetObjectTypeException
 
 @RestControllerAdvice
 class AuthExceptionHandler {
@@ -57,6 +50,14 @@ class AuthExceptionHandler {
         "code" to "INVALID_CREDENTIALS", "message" to e.message
     )
 
+    @ExceptionHandler(UnauthorizedException::class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    fun onUnauthorizedException(
+        e: UnauthorizedException
+    ) = mapOf(
+        "code" to "UNAUTHORIZED", "message" to e.message
+    )
+
     @ExceptionHandler(RateLimitException::class)
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
     fun onRateLimitException(
@@ -82,10 +83,10 @@ class AuthExceptionHandler {
         return ResponseEntity
             .status(HttpStatus.BAD_REQUEST)
             .body(
-            mapOf(
-                "code" to "VALIDATION_ERROR",
-                "errors" to errors
+                mapOf(
+                    "code" to "VALIDATION_ERROR",
+                    "errors" to errors
+                )
             )
-        )
     }
 }

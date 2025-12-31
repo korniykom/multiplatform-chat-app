@@ -1,6 +1,6 @@
 package com.korniykom.kotlin_chat.domain.exception
 
-class UserNotFoundException: RuntimeException(
+class UserNotFoundException : RuntimeException(
     "User not found"
 ) {
 }

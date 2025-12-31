@@ -1,27 +1,16 @@
 package com.korniykom.kotlin_chat.api.controller
 
 import com.korniykom.kotlin_chat.api.config.IpRateLimit
-import com.korniykom.kotlin_chat.api.dto.AuthenticatedUserDto
-import com.korniykom.kotlin_chat.api.dto.ChangePasswordRequest
-import com.korniykom.kotlin_chat.api.dto.EmailRequest
-import com.korniykom.kotlin_chat.api.dto.LoginRequest
-import com.korniykom.kotlin_chat.api.dto.RefreshRequest
-import com.korniykom.kotlin_chat.api.dto.RegisterRequest
-import com.korniykom.kotlin_chat.api.dto.ResetPasswordRequest
-import com.korniykom.kotlin_chat.api.dto.UserDto
+import com.korniykom.kotlin_chat.api.dto.*
 import com.korniykom.kotlin_chat.api.mappers.toAuthenticatedUserDto
 import com.korniykom.kotlin_chat.api.mappers.toUserDto
+import com.korniykom.kotlin_chat.api.util.requestUserId
 import com.korniykom.kotlin_chat.infra.rate_limiting.EmailRateLimiter
 import com.korniykom.kotlin_chat.service.AuthService
 import com.korniykom.kotlin_chat.service.EmailVerificationService
 import com.korniykom.kotlin_chat.service.PasswordResetService
 import jakarta.validation.Valid
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.concurrent.TimeUnit
 
 @RestController
@@ -119,7 +108,11 @@ class AuthController(
     fun changePassword(
         @Valid @RequestBody body: ChangePasswordRequest
     ) {
-        // TODO Extract user ID and call service
+        passwordResetService.changePassword(
+            userId = requestUserId,
+            oldPassword = body.oldPassword,
+            newPassword = body.newPassword
+        )
     }
 
 

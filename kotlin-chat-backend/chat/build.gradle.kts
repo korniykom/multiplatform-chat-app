@@ -1,7 +1,7 @@
 plugins {
     id("java-library")
     id("kotlin-chat.spring-boot-service")
-        alias(libs.plugins.kotlin.jpa)
+    alias(libs.plugins.kotlin.jpa)
 }
 
 group = "com.korniykom"

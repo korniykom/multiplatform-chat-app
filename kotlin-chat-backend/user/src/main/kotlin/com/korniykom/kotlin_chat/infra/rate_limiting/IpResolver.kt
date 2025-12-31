@@ -49,8 +49,8 @@ class IpResolver(
     fun getClientIp(request: HttpServletRequest): String {
         val remoteAddr = request.remoteAddr
 
-        if(!isFromTrustedProxy(remoteAddr)) {
-            if(nginxConfig.requireProxy) {
+        if (!isFromTrustedProxy(remoteAddr)) {
+            if (nginxConfig.requireProxy) {
                 logger.warn("Direct connection attempt from $remoteAddr")
                 throw SecurityException("No valid client IP in proxy headers")
             }
@@ -60,9 +60,9 @@ class IpResolver(
 
         val clientIp = extractFromXRealIp(request, remoteAddr)
 
-        if(clientIp == null) {
+        if (clientIp == null) {
             logger.warn("No valid client IP in proxy headers")
-            if(nginxConfig.requireProxy) {
+            if (nginxConfig.requireProxy) {
                 throw SecurityException("No valid client IP in proxy headers")
             }
         }
@@ -82,7 +82,7 @@ class IpResolver(
     private fun validateAndNormalizeIp(ip: String, headerName: String, proxyIp: String): String? {
         val trimmedIp = ip.trim()
 
-        if(trimmedIp.isBlank() || INVALID_IPS.contains(trimmedIp)) {
+        if (trimmedIp.isBlank() || INVALID_IPS.contains(trimmedIp)) {
             logger.debug("Invalid IP in $headerName: $ip from proxy $proxyIp")
             return null
         }
@@ -92,18 +92,19 @@ class IpResolver(
                 trimmedIp.contains(":") -> Inet6Address.getByName(trimmedIp)
                 trimmedIp.matches(Regex("\\d+\\.\\d+\\.\\d+\\.\\d+")) ->
                     Inet4Address.getByName(trimmedIp)
+
                 else -> {
                     logger.warn("Invalid IP format in $headerName: $trimmedIp from proxy $proxyIp")
                     return null
                 }
             }
 
-            if(isPrivateIp(inetAddr.hostAddress)) {
+            if (isPrivateIp(inetAddr.hostAddress)) {
                 logger.debug("Private IP in $headerName: $trimmedIp from proxy $proxyIp")
             }
 
             inetAddr.hostAddress
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             logger.warn("Invalid IP format in $headerName: $trimmedIp from proxy $proxyIp", e)
             null
         }

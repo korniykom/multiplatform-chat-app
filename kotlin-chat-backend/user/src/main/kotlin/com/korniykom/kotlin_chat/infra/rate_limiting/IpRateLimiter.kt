@@ -12,9 +12,10 @@ import java.time.Duration
 class IpRateLimiter(
     private val redisTemplate: StringRedisTemplate
 ) {
-    companion object{
+    companion object {
         private const val IP_RATE_LIMIT_PREFIX = "rate_limit:ip"
     }
+
     @Value("classpath:ip_rate_limit.lua")
     lateinit var rateLimitResource: Resource
 
@@ -26,7 +27,7 @@ class IpRateLimiter(
         DefaultRedisScript(script, List::class.java as Class<List<Long>>)
     }
 
-    fun<T> withIpRateLimit(
+    fun <T> withIpRateLimit(
         ipAddress: String,
         resetsInDuration: Duration,
         maxRequestsPerIp: Int,
@@ -42,7 +43,7 @@ class IpRateLimiter(
         )
         val currentCount = result[0]
 
-        return if(currentCount <= maxRequestsPerIp) {
+        return if (currentCount <= maxRequestsPerIp) {
             action()
         } else {
             val ttl = result[1]

@@ -25,6 +25,7 @@ class EmailVerificationService(
     fun resendVerificationEmail(email: String) {
         // TODO: Trigger resend
     }
+
     @Transactional
     fun createVerificationToken(email: String): EmailVerificationToken {
         val userEntity = userRepository.findByEmail(email)
@@ -46,11 +47,11 @@ class EmailVerificationService(
         val verificationToken = emailVerificationTokenRepository.findByToken(token)
             ?: throw InvalidTokenException("Email verification token is not valid")
 
-        if(verificationToken.isUsed) {
+        if (verificationToken.isUsed) {
             throw InvalidTokenException("Email verification token is already used")
         }
 
-        if(verificationToken.isExpired) {
+        if (verificationToken.isExpired) {
             throw InvalidTokenException("Email verification token is expired")
         }
 

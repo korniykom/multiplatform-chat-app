@@ -2,9 +2,7 @@ package com.korniykom.kotlin_chat.api.dto
 
 import com.korniykom.kotlin_chat.api.util.Password
 import jakarta.validation.constraints.Email
-import jakarta.validation.constraints.Pattern
 import org.hibernate.validator.constraints.Length
-import org.springframework.stereotype.Component
 
 data class RegisterRequest(
     @field:Email("Must be a valid email")

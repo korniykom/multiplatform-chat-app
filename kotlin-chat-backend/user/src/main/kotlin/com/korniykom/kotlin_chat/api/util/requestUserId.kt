@@ -1,0 +1,9 @@
+package com.korniykom.kotlin_chat.api.util
+
+import com.korniykom.kotlin_chat.domain.exception.UnauthorizedException
+import com.korniykom.kotlin_chat.domain.model.UserId
+import org.springframework.security.core.context.SecurityContextHolder
+
+val requestUserId: UserId
+    get() = SecurityContextHolder.getContext().authentication?.principal as? UserId
+        ?: throw UnauthorizedException()

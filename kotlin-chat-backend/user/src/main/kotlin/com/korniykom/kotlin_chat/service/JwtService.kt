@@ -7,8 +7,7 @@ import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.util.Date
-import java.util.UUID
+import java.util.*
 import kotlin.io.encoding.Base64
 
 @Service
@@ -19,7 +18,7 @@ class JwtService(
     private val secretKey = Keys.hmacShaKeyFor(
         Base64.decode(secretBase64)
     )
-    private val accessTokenValidityMs = expirationMinutes * 60* 1000L
+    private val accessTokenValidityMs = expirationMinutes * 60 * 1000L
     val refreshTokenValidityMs = 30 * 24 * 60 * 60 * 1000L
 
     fun generateAccessToken(userId: UserId): String {
@@ -72,7 +71,7 @@ class JwtService(
     }
 
     private fun parseAllClaims(token: String): Claims? {
-        val rawToken = if(token.startsWith("Bearer ")) {
+        val rawToken = if (token.startsWith("Bearer ")) {
             token.removePrefix("Bearer ")
         } else token
 
@@ -82,7 +81,7 @@ class JwtService(
                 .build()
                 .parseSignedClaims(rawToken)
                 .payload
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             null
         }
     }

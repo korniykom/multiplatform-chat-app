@@ -1,5 +1,6 @@
 package com.korniykom.kotlin_chat.security
 
+import com.korniykom.kotlin_chat.api.config.JwtAuthFilter
 import jakarta.servlet.DispatcherType
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -8,12 +9,14 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.authentication.HttpStatusEntryPoint
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 
 @Configuration
 class SecurityConfig {
     @Bean
     fun filterChain(
-        httpSecurity: HttpSecurity
+        httpSecurity: HttpSecurity,
+        jwtAuthFilter: JwtAuthFilter
     ): SecurityFilterChain {
         return httpSecurity
             .csrf { it.disable() }
@@ -26,9 +29,12 @@ class SecurityConfig {
                         DispatcherType.FORWARD
                     )
                     .permitAll()
+                    .requestMatchers("/api/auth/change-password")
+                    .authenticated()
                     .anyRequest()
                     .authenticated()
             }
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter::class.java)
             .exceptionHandling { configurer ->
                 configurer.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
             }
