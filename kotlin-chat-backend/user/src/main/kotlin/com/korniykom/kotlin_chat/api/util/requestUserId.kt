@@ -1,7 +1,7 @@
 package com.korniykom.kotlin_chat.api.util
 
 import com.korniykom.kotlin_chat.domain.exception.UnauthorizedException
-import com.korniykom.kotlin_chat.domain.model.UserId
+import com.korniykom.kotlin_chat.type.UserId
 import org.springframework.security.core.context.SecurityContextHolder
 
 val requestUserId: UserId

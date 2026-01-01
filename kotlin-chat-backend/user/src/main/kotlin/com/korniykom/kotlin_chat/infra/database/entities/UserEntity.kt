@@ -1,6 +1,6 @@
 package com.korniykom.kotlin_chat.infra.database.entities
 
-import com.korniykom.kotlin_chat.domain.model.UserId
+import com.korniykom.kotlin_chat.type.UserId
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
 import java.time.Instant

@@ -1,14 +1,16 @@
 package com.korniykom.kotlin_chat.service
 
+import com.korniykom.kotlin_chat.domain.events.user.UserEvent
 import com.korniykom.kotlin_chat.domain.exception.*
 import com.korniykom.kotlin_chat.domain.model.AuthenticatedUser
-import com.korniykom.kotlin_chat.domain.model.User
-import com.korniykom.kotlin_chat.domain.model.UserId
+import com.korniykom.kotlin_chat.type.User
+import com.korniykom.kotlin_chat.type.UserId
 import com.korniykom.kotlin_chat.infra.database.entities.RefreshTokenEntity
 import com.korniykom.kotlin_chat.infra.database.entities.UserEntity
 import com.korniykom.kotlin_chat.infra.database.repositories.RefreshTokenRepository
 import com.korniykom.kotlin_chat.infra.database.repositories.UserRepository
 import com.korniykom.kotlin_chat.infra.mappers.toUser
+import com.korniykom.kotlin_chat.infra.message_queue.EventPublisher
 import com.korniykom.kotlin_chat.infra.security.PasswordEncoder
 import jakarta.transaction.Transactional
 import org.springframework.data.repository.findByIdOrNull
@@ -23,7 +25,8 @@ class AuthService(
     private val passwordEncoder: PasswordEncoder,
     private val jwtService: JwtService,
     private val refreshTokenRepository: RefreshTokenRepository,
-    private val emailVerificationService: EmailVerificationService
+    private val emailVerificationService: EmailVerificationService,
+    private val eventPublisher: EventPublisher
 ) {
     fun login(
         email: String,
@@ -120,6 +123,15 @@ class AuthService(
         ).toUser()
 
         val token = emailVerificationService.createVerificationToken(trimmedEmail)
+
+        eventPublisher.publish(
+            event = UserEvent.Created(
+                userId = savedUser.id,
+                email = savedUser.email,
+                userName = savedUser.username,
+                verificationToken = token.token
+            )
+        )
 
         return savedUser
     }

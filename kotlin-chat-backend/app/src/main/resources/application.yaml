@@ -1,4 +1,9 @@
 spring:
+  rabbitmq:
+    host: localhost
+    port: 7773
+    username: rabbit
+    password: password
   application:
     name: kotlin-chat
   datasource:
@@ -10,6 +15,7 @@ spring:
   jpa:
     properties:
       hibernate:
+        default_schema: user_service
         dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: true
         show_sql: true

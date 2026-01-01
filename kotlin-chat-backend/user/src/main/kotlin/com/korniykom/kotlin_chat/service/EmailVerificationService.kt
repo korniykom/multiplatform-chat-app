@@ -1,5 +1,7 @@
 package com.korniykom.kotlin_chat.service
 
+import com.korniykom.kotlin_chat.domain.events.Event
+import com.korniykom.kotlin_chat.domain.events.user.UserEvent
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.UserNotFoundException
 import com.korniykom.kotlin_chat.domain.model.EmailVerificationToken
@@ -8,6 +10,7 @@ import com.korniykom.kotlin_chat.infra.database.repositories.EmailVerificationTo
 import com.korniykom.kotlin_chat.infra.database.repositories.UserRepository
 import com.korniykom.kotlin_chat.infra.mappers.toEmailVerificationToken
 import com.korniykom.kotlin_chat.infra.mappers.toUser
+import com.korniykom.kotlin_chat.infra.message_queue.EventPublisher
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.scheduling.annotation.Scheduled
@@ -19,11 +22,27 @@ import java.time.temporal.ChronoUnit
 class EmailVerificationService(
     private val emailVerificationTokenRepository: EmailVerificationTokenRepository,
     private val userRepository: UserRepository,
+    private val eventPublisher: EventPublisher,
     @param:Value("\${email.verification.expiry-hours}") private val expiryHours: Long
 ) {
 
+    @Transactional
     fun resendVerificationEmail(email: String) {
-        // TODO: Trigger resend
+        val token = createVerificationToken(email)
+
+        if(token.user.hasEmailVerified) {
+            return
+        }
+
+        eventPublisher.publish(
+            event = UserEvent.RequestResendVerification(
+                userId = token.user.id,
+                verificationToken = token.token,
+                userName = token.user.username,
+                email = token.user.email
+            )
+        )
+
     }
 
     @Transactional

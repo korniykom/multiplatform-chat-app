@@ -1,4 +1,4 @@
-package com.korniykom.kotlin_chat.domain.model
+package com.korniykom.kotlin_chat.type
 
 import java.util.*
 

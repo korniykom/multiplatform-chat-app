@@ -1,6 +1,6 @@
 package com.korniykom.kotlin_chat.api.dto
 
-import com.korniykom.kotlin_chat.domain.model.UserId
+import com.korniykom.kotlin_chat.type.UserId
 
 data class UserDto(
     val id: UserId,

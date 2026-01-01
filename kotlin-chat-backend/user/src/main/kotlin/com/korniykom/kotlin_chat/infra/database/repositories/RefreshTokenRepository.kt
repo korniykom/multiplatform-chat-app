@@ -1,6 +1,6 @@
 package com.korniykom.kotlin_chat.infra.database.repositories
 
-import com.korniykom.kotlin_chat.domain.model.UserId
+import com.korniykom.kotlin_chat.type.UserId
 import com.korniykom.kotlin_chat.infra.database.entities.RefreshTokenEntity
 import org.springframework.data.jpa.repository.JpaRepository
 

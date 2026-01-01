@@ -1,5 +1,6 @@
 package com.korniykom.kotlin_chat
 
+import org.hibernate.dialect.Database
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 

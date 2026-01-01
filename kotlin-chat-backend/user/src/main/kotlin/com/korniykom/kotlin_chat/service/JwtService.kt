@@ -1,7 +1,7 @@
 package com.korniykom.kotlin_chat.service
 
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
-import com.korniykom.kotlin_chat.domain.model.UserId
+import com.korniykom.kotlin_chat.type.UserId
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys

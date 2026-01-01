@@ -4,7 +4,7 @@ import com.korniykom.kotlin_chat.domain.exception.InvalidCredentialException
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.SamePasswordException
 import com.korniykom.kotlin_chat.domain.exception.UserNotFoundException
-import com.korniykom.kotlin_chat.domain.model.UserId
+import com.korniykom.kotlin_chat.type.UserId
 import com.korniykom.kotlin_chat.infra.database.entities.PasswordResetTokenEntity
 import com.korniykom.kotlin_chat.infra.database.repositories.PasswordResetTokenRepository
 import com.korniykom.kotlin_chat.infra.database.repositories.RefreshTokenRepository
