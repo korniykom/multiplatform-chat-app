@@ -1,0 +1,41 @@
+package com.korniykom.kotlin_chat.infra.database.repository
+
+import com.korniykom.kotlin_chat.infra.database.entities.ChatMessageEntity
+import com.korniykom.kotlin_chat.type.ChatId
+import org.springframework.data.domain.Slice
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.data.jpa.repository.Query
+import java.awt.print.Pageable
+import java.time.Instant
+
+interface ChatMessageRepository: JpaRepository<ChatMessageEntity, ChatId> {
+    @Query("""
+        SELECT m 
+        FROM ChatMessageEntity m
+        WHERE m.chatId = :chatId
+        AND m.createdAt < :before
+        ORDER BY m.createdAt DESC
+    """)
+    fun findByChatIdBefore(
+        chatId: ChatId,
+        before: Instant,
+        pageable: Pageable
+    ): Slice<ChatMessageEntity>
+
+    @Query("""
+        SELECT m
+        FROM ChatMessageEntity m
+        LEFT JOIN FETCH m.sender
+        WHERE m.chatId IN :chatIds
+        AND (m.createAt, m.id) = (
+            SELECT m2.createdAt, m2.id
+            FROM ChatMessageEntity m2
+            WHERE m2.chatId = m.chatId
+            ORDER BY m2.createAt DESC
+            LIMIT 1
+        )
+    """)
+    fun findLatestMessagesByChatIds(
+        chatIds: List<ChatId>
+    ): List<ChatMessageEntity>
+}

@@ -17,7 +17,7 @@ import java.time.Instant
         )
     ]
 )
-class ChatMessage(
+class ChatMessageEntity(
     @Id
     @GeneratedValue(GenerationType.UUID)
     var id: ChatMessageId? = null,
