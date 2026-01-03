@@ -1,4 +1,4 @@
-package com.korniykom.kotlin_chat.domain
+package com.korniykom.kotlin_chat.domain.models
 
 import com.korniykom.kotlin_chat.type.ChatId
 import java.time.Instant

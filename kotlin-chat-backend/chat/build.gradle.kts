@@ -13,6 +13,8 @@ repositories {
 
 dependencies {
     implementation(projects.common)
+    runtimeOnly(libs.postgresql)
+    implementation(libs.spring.boot.starter.data.jpa)
     testImplementation(kotlin("test"))
 }
 
