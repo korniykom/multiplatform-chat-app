@@ -11,3 +11,6 @@ nginx:
 rate-limit:
   ip:
     apply-limit: false
+
+email:
+  url: "http://localhost:8080"

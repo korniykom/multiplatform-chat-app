@@ -10,3 +10,6 @@ nginx:
 rate-limit:
   ip:
     apply-limit: true
+
+email:
+  url: "domain-to-deploy-project.com"

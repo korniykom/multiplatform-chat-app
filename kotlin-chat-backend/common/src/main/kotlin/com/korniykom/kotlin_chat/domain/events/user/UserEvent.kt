@@ -37,7 +37,7 @@ sealed class UserEvent(
         val email: String,
         val userId: UserId,
         val userName: String,
-        val verificationToken: String,
+        val passwordResetToken: String,
         val expiresInMinutes: Long,
         override val eventKey: String = UserEventConstants.USER_REQUEST_RESET_PASSWORD
     ): UserEvent(), Event

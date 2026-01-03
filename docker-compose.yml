@@ -1,0 +1,39 @@
+services:
+  postgresql:
+    image: postgres:16
+    container_name: postgres_kotlin-chat
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "7771:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+      - ./docker/postgres/user:/docker-entrypoint-initdb.d
+  redis:
+    image: redis:7
+    container_name: redis_kotlin-chat
+    restart: unless-stopped
+    ports:
+      - "7772:6379"
+    volumes:
+    
+      - redis_data:/data
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-kotlin-chat
+    restart: unless-stopped
+    ports: 
+      - "7773:5672"
+      - "7774:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: rabbit
+      RABBITMQ_DEFAULT_PASS: password
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+volumes:
+  postgresql_data:
+  redis_data:
+  rabbitmq_data:

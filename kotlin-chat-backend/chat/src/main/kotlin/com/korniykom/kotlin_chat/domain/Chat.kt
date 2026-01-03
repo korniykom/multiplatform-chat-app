@@ -1,0 +1,13 @@
+package com.korniykom.kotlin_chat.domain
+
+import com.korniykom.kotlin_chat.type.ChatId
+import java.time.Instant
+
+data class Chat (
+    val id: ChatId,
+    val participant: Set<ChatParticipant>,
+    val lastMessage: ChatMessage?,
+    val creator: ChatParticipant,
+    val lastActivityAt: Instant,
+    val createdAt: Instant
+)

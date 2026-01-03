@@ -1,5 +1,7 @@
 package com.korniykom.kotlin_chat.service
 
+import com.korniykom.kotlin_chat.api.util.requestUserId
+import com.korniykom.kotlin_chat.domain.events.user.UserEvent
 import com.korniykom.kotlin_chat.domain.exception.InvalidCredentialException
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.SamePasswordException
@@ -9,6 +11,7 @@ import com.korniykom.kotlin_chat.infra.database.entities.PasswordResetTokenEntit
 import com.korniykom.kotlin_chat.infra.database.repositories.PasswordResetTokenRepository
 import com.korniykom.kotlin_chat.infra.database.repositories.RefreshTokenRepository
 import com.korniykom.kotlin_chat.infra.database.repositories.UserRepository
+import com.korniykom.kotlin_chat.infra.message_queue.EventPublisher
 import com.korniykom.kotlin_chat.infra.security.PasswordEncoder
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Value
@@ -24,6 +27,7 @@ class PasswordResetService(
     private val passwordResetTokenRepository: PasswordResetTokenRepository,
     private val passwordEncoder: PasswordEncoder,
     private val refreshTokenRepository: RefreshTokenRepository,
+    private val eventPublisher: EventPublisher,
     @param:Value("\${email.reset-password.expiry-minutes}") private val expiryMinutes: Long
 ) {
     @Transactional
@@ -39,7 +43,15 @@ class PasswordResetService(
         )
         passwordResetTokenRepository.save(token)
 
-        // TODO Inform notification service about password reset trigger to send email
+        eventPublisher.publish(
+            UserEvent.RequestResetPassword(
+                userId = user.id!!,
+                email = user.email,
+                userName = user.username,
+                passwordResetToken = token.token,
+                expiresInMinutes = expiryMinutes
+            )
+        )
     }
 
     @Transactional

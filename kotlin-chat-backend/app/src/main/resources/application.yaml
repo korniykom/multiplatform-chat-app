@@ -1,4 +1,15 @@
 spring:
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${GMAIL_USERNAME}
+    password: ${GMAIL_APP_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   rabbitmq:
     host: localhost
     port: 7773
@@ -32,6 +43,7 @@ jwt:
   expiration-minutes: 15
 
 email:
+  from: korniykom@gmail.com
   verification:
     expiry-hours: 24
   reset-password:
@@ -43,3 +55,5 @@ nginx:
     - "::1"
     - "172.17.0.0/16"
     - "10.0.0.5/32"
+
+

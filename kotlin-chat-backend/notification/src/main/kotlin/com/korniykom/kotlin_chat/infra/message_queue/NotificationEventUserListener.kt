@@ -1,25 +1,42 @@
 package com.korniykom.kotlin_chat.infra.message_queue
 
 import com.korniykom.kotlin_chat.domain.events.user.UserEvent
+import com.korniykom.kotlin_chat.service.EmailService
 import org.springframework.amqp.rabbit.annotation.RabbitListener
 import org.springframework.stereotype.Component
 import org.springframework.transaction.annotation.Transactional
+import java.time.Duration
 
 @Component
 @Transactional
-class NotificationEventUserListener {
+class NotificationEventUserListener(
+    private val emailService: EmailService
+) {
     @RabbitListener(queues = [MessageQueues.NOTIFICATION_USER_EVENTS])
     fun handleUserEvent(event: UserEvent) {
         when(event) {
             is UserEvent.Created -> {
-                println("User created")
+                emailService.sendVerificationEmail(
+                    email = event.email,
+                    username = event.userName,
+                    userId = event.userId,
+                    token = event.verificationToken
+                )
             }
             is UserEvent.RequestResendVerification -> {
-                println("Request resend verification")
-            }
+                emailService.sendVerificationEmail(
+                    email = event.email,
+                    username = event.userName,
+                    userId = event.userId,
+                    token = event.verificationToken
+                )            }
             is UserEvent.RequestResetPassword -> {
-                println("Request Reset Password")
-            }
+                emailService.sendPasswordResetEmail(
+                    email = event.email,
+                    username = event.userName,
+                    userId = event.userId,
+                    token = event.passwordResetToken,
+                    expiresIn = Duration.ofMinutes(event.expiresInMinutes))            }
             else -> Unit
             }
     }

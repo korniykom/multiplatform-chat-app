@@ -1,0 +1,1 @@
+to change profile add -Dspring.profiles.active=dev to VM option from Edit Configuration in Intellij
