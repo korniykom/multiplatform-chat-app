@@ -4,7 +4,7 @@ import com.korniykom.kotlin_chat.api.config.IpRateLimit
 import com.korniykom.kotlin_chat.api.dto.*
 import com.korniykom.kotlin_chat.api.mappers.toAuthenticatedUserDto
 import com.korniykom.kotlin_chat.api.mappers.toUserDto
-import com.korniykom.kotlin_chat.api.util.requestUserId
+import com.korniykom.kotlin_chat.api.requestUserId
 import com.korniykom.kotlin_chat.infra.rate_limiting.EmailRateLimiter
 import com.korniykom.kotlin_chat.service.AuthService
 import com.korniykom.kotlin_chat.service.EmailVerificationService

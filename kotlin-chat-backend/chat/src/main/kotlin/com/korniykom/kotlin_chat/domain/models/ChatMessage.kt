@@ -7,7 +7,7 @@ import java.time.Instant
 data class ChatMessage(
     val id: ChatMessageId,
     val chat: ChatId,
-    val sander: ChatParticipant,
+    val sender: ChatParticipant,
     val content: String,
     val createdAt: Instant
 
