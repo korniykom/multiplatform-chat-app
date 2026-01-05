@@ -1,6 +1,7 @@
 package com.korniykom.kotlin_chat.infra.message_queue
 
 import com.korniykom.kotlin_chat.domain.events.Event
+import com.korniykom.kotlin_chat.domain.events.chat.ChatEventConstants
 import com.korniykom.kotlin_chat.domain.events.user.UserEventConstants
 import org.springframework.amqp.core.Binding
 import org.springframework.amqp.core.BindingBuilder
@@ -56,6 +57,20 @@ class RabbitMqConfig {
     }
 
     @Bean
+    fun chatExchange() = TopicExchange(
+        ChatEventConstants.CHAT_EXCHANGE,
+        true,
+        false
+    )
+
+    @Bean
+    fun chatUserEventsQueue() = TopicExchange(
+        UserEventConstants.USER_EXCHANGE,
+        true,
+        false
+    )
+
+    @Bean
     fun userExchange() = TopicExchange(
         UserEventConstants.USER_EXCHANGE,
         true,
@@ -64,9 +79,20 @@ class RabbitMqConfig {
 
     @Bean
     fun notificationUserEventsQueue() = Queue(
-        MessageQueues.NOTIFICATION_USER_EVENTS,
+        MessageQueues.CHAT_USER_EVENTS,
         true
     )
+
+    @Bean
+    fun chatUserEventBinding(
+        chatUserEventsQueue: Queue,
+        userExchange: TopicExchange,
+    ): Binding {
+        return BindingBuilder
+            .bind(chatUserEventsQueue)
+            .to(userExchange)
+            .with("user.*")
+    }
 
     @Bean
     fun notificationUserEventBinding(
@@ -93,4 +119,5 @@ class RabbitMqConfig {
             setMessageConverter(messageConverter)
         }
     }
+
 }

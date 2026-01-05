@@ -4,6 +4,8 @@ import com.korniykom.kotlin_chat.type.ChatId
 import com.korniykom.kotlin_chat.type.ChatMessageId
 import jakarta.persistence.*
 import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.OnDelete
+import org.hibernate.annotations.OnDeleteAction
 import java.time.Instant
 
 @Entity
@@ -19,35 +21,33 @@ import java.time.Instant
 )
 class ChatMessageEntity(
     @Id
-    @GeneratedValue(GenerationType.UUID)
+    @GeneratedValue(strategy = GenerationType.UUID)
     var id: ChatMessageId? = null,
-
-    @JoinColumn(
+    @Column(nullable = false)
+    var content: String,
+    @Column(
         name = "chat_id",
         nullable = false,
         updatable = false
     )
     var chatId: ChatId,
-    @Column(nullable = false)
-    var content: String,
-    @ManyToOne(
-        fetch = FetchType.LAZY
-    )
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(
         name = "chat_id",
         nullable = false,
         insertable = false,
         updatable = false
     )
+    @OnDelete(action = OnDeleteAction.CASCADE)
     var chat: ChatEntity? = null,
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "sender_id",
         nullable = false,
         insertable = false,
         updatable = false
     )
-    var sender: ChatParticipantEntity? = null,
+    var sender: ChatParticipantEntity,
     @CreationTimestamp
     var createdAt: Instant = Instant.now()
 )

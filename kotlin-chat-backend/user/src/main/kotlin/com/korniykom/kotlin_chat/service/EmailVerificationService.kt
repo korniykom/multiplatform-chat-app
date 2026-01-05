@@ -85,6 +85,14 @@ class EmailVerificationService(
                 this.hasVerifiedEmail = true
             }
         ).toUser()
+
+        eventPublisher.publish(
+            event = UserEvent.Verified(
+                userId = verificationToken.user.id!!,
+                userName = verificationToken.user.username,
+                email = verificationToken.user.email
+            )
+        )
     }
 
     @Scheduled(cron = "0 0 3 * * *")

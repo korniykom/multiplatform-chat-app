@@ -9,8 +9,6 @@ import java.time.Instant
 @Table(
     schema = "chat_service",
     name = "chats",
-
-
 )
 class ChatEntity(
     @Id
@@ -33,7 +31,7 @@ class ChatEntity(
                 name = "idx_chat_participant_chat_id_user_id",
                 columnList = "chat_id, user_id",
                 unique = true
-            ),
+           ),
             Index(
                 name = "idx_chat_participant_user_id_chat_id",
                 columnList = "user_id, chat_id",
@@ -41,7 +39,7 @@ class ChatEntity(
             )
         ]
     )
-    val participants: Set<ChatParticipantEntity> = emptySet(),
+    var participants: Set<ChatParticipantEntity> = emptySet(),
     @CreationTimestamp
     var createdAt: Instant = Instant.now()
 )

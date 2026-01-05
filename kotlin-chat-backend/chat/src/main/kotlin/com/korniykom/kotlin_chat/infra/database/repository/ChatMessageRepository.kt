@@ -2,15 +2,18 @@ package com.korniykom.kotlin_chat.infra.database.repository
 
 import com.korniykom.kotlin_chat.infra.database.entities.ChatMessageEntity
 import com.korniykom.kotlin_chat.type.ChatId
+import com.korniykom.kotlin_chat.type.ChatMessageId
 import org.springframework.data.domain.Slice
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import java.awt.print.Pageable
 import java.time.Instant
 
-interface ChatMessageRepository: JpaRepository<ChatMessageEntity, ChatId> {
+
+interface ChatMessageRepository: JpaRepository<ChatMessageEntity, ChatMessageId> {
+
     @Query("""
-        SELECT m 
+        SELECT m
         FROM ChatMessageEntity m
         WHERE m.chatId = :chatId
         AND m.createdAt < :before
@@ -27,15 +30,15 @@ interface ChatMessageRepository: JpaRepository<ChatMessageEntity, ChatId> {
         FROM ChatMessageEntity m
         LEFT JOIN FETCH m.sender
         WHERE m.chatId IN :chatIds
-        AND (m.createAt, m.id) = (
+        AND (m.createdAt, m.id) = (
             SELECT m2.createdAt, m2.id
             FROM ChatMessageEntity m2
             WHERE m2.chatId = m.chatId
-            ORDER BY m2.createAt DESC
+            ORDER BY m2.createdAt DESC 
             LIMIT 1
         )
     """)
     fun findLatestMessagesByChatIds(
-        chatIds: List<ChatId>
+        chatIds: Set<ChatId>
     ): List<ChatMessageEntity>
 }
