@@ -1,4 +1,4 @@
-package com.korniykom.kotlin_chat.api
+package com.korniykom.kotlin_chat.api.util
 
 import com.korniykom.kotlin_chat.domain.exception.UnauthorizedException
 import com.korniykom.kotlin_chat.type.UserId

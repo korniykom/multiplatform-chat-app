@@ -2,6 +2,8 @@ package com.korniykom.kotlin_chat.service
 
 import com.korniykom.kotlin_chat.api.dto.ChatMessageDto
 import com.korniykom.kotlin_chat.api.mappers.toChatMessageDto
+import com.korniykom.kotlin_chat.domain.event.MessageDeletedEvent
+import com.korniykom.kotlin_chat.domain.events.chat.ChatEvent
 import com.korniykom.kotlin_chat.domain.exception.ChatNotFoundException
 import com.korniykom.kotlin_chat.domain.exception.ChatParticipantsNotFoundException
 import com.korniykom.kotlin_chat.domain.exception.ForbiddenException
@@ -12,10 +14,12 @@ import com.korniykom.kotlin_chat.infra.database.mappers.toChatMessage
 import com.korniykom.kotlin_chat.infra.database.repository.ChatMessageRepository
 import com.korniykom.kotlin_chat.infra.database.repository.ChatParticipantRepository
 import com.korniykom.kotlin_chat.infra.database.repository.ChatRepository
+import com.korniykom.kotlin_chat.infra.message_queue.EventPublisher
 import com.korniykom.kotlin_chat.type.ChatId
 import com.korniykom.kotlin_chat.type.ChatMessageId
 import com.korniykom.kotlin_chat.type.UserId
 import jakarta.transaction.Transactional
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -25,7 +29,9 @@ import java.time.Instant
 class ChatMessageService(
     private val chatRepository: ChatRepository,
     private val chatMessageRepository: ChatMessageRepository,
-    private val chatParticipantRepository: ChatParticipantRepository
+    private val chatParticipantRepository: ChatParticipantRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher,
+    private val eventPublisher: EventPublisher
 ) {
 
     fun getChatMessages(
@@ -59,12 +65,22 @@ class ChatMessageService(
         val sender = chatParticipantRepository.findByIdOrNull(senderId)
             ?: throw ChatParticipantsNotFoundException(senderId)
 
-        val savedMessage = chatMessageRepository.save(
+        val savedMessage = chatMessageRepository.saveAndFlush(
             ChatMessageEntity(
                 id = messageId,
                 content = content.trim(),
                 chatId = chatId,
                 sender = sender
+            )
+        )
+
+        eventPublisher.publish(
+            ChatEvent.NewMessage(
+                senderId = senderId,
+                senderUsername = sender.username,
+                recipientIds = chat.participants.map {it.userId}.toSet(),
+                chatId = chatId,
+                message = savedMessage.content
             )
         )
 
@@ -85,5 +101,11 @@ class ChatMessageService(
 
         chatMessageRepository.deleteById(messageId)
 
+        applicationEventPublisher.publishEvent(
+            MessageDeletedEvent(
+                messageId,
+                message.chatId
+            )
+        )
     }
 }

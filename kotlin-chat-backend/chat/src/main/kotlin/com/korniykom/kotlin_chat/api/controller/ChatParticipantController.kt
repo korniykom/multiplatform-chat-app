@@ -2,7 +2,7 @@ package com.korniykom.kotlin_chat.api.controller
 
 import com.korniykom.kotlin_chat.api.dto.ChatParticipantDto
 import com.korniykom.kotlin_chat.api.mappers.toChatParticipantDto
-import com.korniykom.kotlin_chat.api.requestUserId
+import com.korniykom.kotlin_chat.api.util.requestUserId
 import com.korniykom.kotlin_chat.service.ChatParticipantService
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller

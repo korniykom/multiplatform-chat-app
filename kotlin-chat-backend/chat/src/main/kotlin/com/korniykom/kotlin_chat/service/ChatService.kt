@@ -1,5 +1,7 @@
 package com.korniykom.kotlin_chat.service
 
+import com.korniykom.kotlin_chat.domain.event.ChatParticipantLeftEvent
+import com.korniykom.kotlin_chat.domain.event.ChatParticipantsJoinedEvent
 import com.korniykom.kotlin_chat.domain.exception.ChatNotFoundException
 import com.korniykom.kotlin_chat.domain.exception.ChatParticipantsNotFoundException
 import com.korniykom.kotlin_chat.domain.exception.ForbiddenException
@@ -16,6 +18,7 @@ import com.korniykom.kotlin_chat.type.ChatId
 import com.korniykom.kotlin_chat.type.User
 import com.korniykom.kotlin_chat.type.UserId
 import jakarta.transaction.Transactional
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 
@@ -25,6 +28,7 @@ class ChatService(
     private val chatRepository: ChatRepository,
     private val chatMessageRepository: ChatMessageRepository,
     private val chatParticipantRepository: ChatParticipantRepository,
+    private val applicationEventPublisher: ApplicationEventPublisher
 ) {
     @Transactional
     fun createChat(
@@ -82,6 +86,13 @@ class ChatService(
             }
         ).toChat(lastMessage)
 
+        applicationEventPublisher.publishEvent(
+            ChatParticipantsJoinedEvent(
+                chatId,
+                userIds
+            )
+        )
+
         return updatedChat
     }
 
@@ -109,6 +120,13 @@ class ChatService(
             chat.apply {
                 this.participants = chat.participants - participant
             }
+        )
+
+        applicationEventPublisher.publishEvent(
+            ChatParticipantLeftEvent(
+                chatId,
+                userId
+            )
         )
     }
 
