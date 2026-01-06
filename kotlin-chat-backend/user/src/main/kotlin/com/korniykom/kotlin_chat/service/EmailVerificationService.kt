@@ -1,6 +1,5 @@
 package com.korniykom.kotlin_chat.service
 
-import com.korniykom.kotlin_chat.domain.events.Event
 import com.korniykom.kotlin_chat.domain.events.user.UserEvent
 import com.korniykom.kotlin_chat.domain.exception.InvalidTokenException
 import com.korniykom.kotlin_chat.domain.exception.UserNotFoundException

@@ -19,6 +19,8 @@ import com.korniykom.kotlin_chat.type.ChatId
 import com.korniykom.kotlin_chat.type.ChatMessageId
 import com.korniykom.kotlin_chat.type.UserId
 import jakarta.transaction.Transactional
+import org.springframework.cache.annotation.CacheEvict
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.context.ApplicationEventPublisher
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
@@ -33,7 +35,12 @@ class ChatMessageService(
     private val applicationEventPublisher: ApplicationEventPublisher,
     private val eventPublisher: EventPublisher
 ) {
-
+    @Cacheable(
+        value = ["messages"],
+        key = "#chatId",
+        condition = "#before == null && #pageSize < 51",
+        sync = true
+    )
     fun getChatMessages(
         chatId: ChatId,
         before: Instant?,
@@ -52,6 +59,10 @@ class ChatMessageService(
             }
     }
 
+    @CacheEvict(
+        value = ["messages"],
+        key = "#chatId"
+    )
     @Transactional
     fun sendMessage(
         chatId: ChatId,
@@ -87,6 +98,8 @@ class ChatMessageService(
         return savedMessage.toChatMessage()
     }
 
+
+
     @Transactional
     fun deleteMessage(
         messageId: ChatMessageId,
@@ -107,5 +120,15 @@ class ChatMessageService(
                 message.chatId
             )
         )
+
+        evictMessagesCache(message.chatId)
+    }
+
+    @CacheEvict(
+        value = ["messages"],
+        key = "#chatId"
+    )
+    fun evictMessagesCache(chatId: ChatId) {
+
     }
 }

@@ -1,4 +1,4 @@
-package com.korniykom.kotlin_chat.config
+package com.korniykom.kotlin_chat.api.security
 
 import com.korniykom.kotlin_chat.api.config.JwtAuthFilter
 import jakarta.servlet.DispatcherType

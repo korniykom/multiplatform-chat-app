@@ -57,6 +57,7 @@ class ChatService(
         ).toChat()
     }
 
+
     @Transactional
     fun addParticipantsToChat(
         requestUserId: UserId,
@@ -96,9 +97,35 @@ class ChatService(
         return updatedChat
     }
 
+    fun findChatsByUser(userId: UserId): List<Chat> {
+        val chatEntities = chatRepository.findAllByUserId(userId)
+        val chatIds = chatEntities.mapNotNull { it.chatId}
+        val latestMessages = chatMessageRepository
+            .findLatestMessagesByChatIds(chatIds = chatIds.toSet())
+            .associateBy { it.chatId }
+
+
+
+        return chatEntities.map {
+            it.toChat(
+                lastMessage = latestMessages[it.chatId]?.toChatMessage()
+            )
+        }
+            .sortedByDescending { it.lastActivityAt }
+    }
+
+
+
     private fun lastMessageForChat(chatId: ChatId): ChatMessage? {
         return chatMessageRepository.findLatestMessagesByChatIds(setOf(chatId))
             .firstOrNull()?.toChatMessage()
+    }
+
+    fun getChatById(
+        chatId: ChatId,
+        requestUserId: UserId
+    ): Chat? {
+        return chatRepository.findChatById(id =  chatId, userId = requestUserId)?.toChat()
     }
 
     @Transactional

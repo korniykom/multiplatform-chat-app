@@ -6,10 +6,18 @@ import com.korniykom.kotlin_chat.api.dto.ChatMessageDto
 import com.korniykom.kotlin_chat.api.dto.CreateChatRequest
 import com.korniykom.kotlin_chat.api.mappers.toChatDto
 import com.korniykom.kotlin_chat.api.util.requestUserId
+import com.korniykom.kotlin_chat.domain.exception.ChatNotFoundException
+import com.korniykom.kotlin_chat.domain.models.Chat
+import com.korniykom.kotlin_chat.infra.database.mappers.toChat
+import com.korniykom.kotlin_chat.infra.database.mappers.toChatMessage
+import com.korniykom.kotlin_chat.infra.database.repository.ChatMessageRepository
+import com.korniykom.kotlin_chat.infra.database.repository.ChatRepository
 import com.korniykom.kotlin_chat.service.ChatMessageService
 import com.korniykom.kotlin_chat.service.ChatService
 import com.korniykom.kotlin_chat.type.ChatId
+import com.korniykom.kotlin_chat.type.UserId
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -18,17 +26,24 @@ import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.server.ResponseStatusException
 import java.time.Instant
 
 @RestController
 @RequestMapping("/api/chat")
 class ChatController(
     private val chatService: ChatService,
-    private val chatMessageService: ChatMessageService
+    private val chatRepository: ChatRepository,
+    private val chatMessageService: ChatMessageService,
+    private val chatMessageRepository: ChatMessageRepository
 ) {
     companion object {
         private const val DEFAULT_PAGE_SIZE = 20
     }
+
+
+
+
 
     @PostMapping
     fun createChat(
@@ -67,6 +82,20 @@ class ChatController(
             before = before,
             pageSize = pageSize
         )
+    }
+
+    @GetMapping("/{chatId}")
+    fun getChat(
+        @PathVariable("chatId") chatId: ChatId,
+    ): ChatDto {
+        return chatService.getChatById(chatId, requestUserId)?.toChatDto()
+            ?: throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    }
+
+    @GetMapping
+    fun getChatsForUser(
+    ): List<ChatDto> {
+        return chatService.findChatsByUser( requestUserId).map{ it.toChatDto()}
     }
 
 
