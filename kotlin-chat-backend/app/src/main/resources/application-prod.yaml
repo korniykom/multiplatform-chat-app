@@ -13,3 +13,6 @@ rate-limit:
 
 email:
   url: "domain-to-deploy-project.com"
+
+web-socket:
+  allowed-origin: "domain-to-deploy-project.com"

@@ -19,6 +19,6 @@ data class IncomingWebSocketMessage(
 
 
 data class OutgoingWebSocketMessage(
-    val type: IncomingWebSocketMessageType,
+    val type: OutgoingWebSocketMessageType,
     val payload: String
 )
