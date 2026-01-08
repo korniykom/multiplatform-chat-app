@@ -22,6 +22,8 @@ class SecurityConfig {
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests { auth ->
                 auth
+                    .requestMatchers("/uploads/**")
+                    .permitAll()
                     .requestMatchers("/api/auth/**")
                     .permitAll()
                     .requestMatchers("/api/auth/change-password")

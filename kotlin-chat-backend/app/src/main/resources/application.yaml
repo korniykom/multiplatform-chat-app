@@ -1,4 +1,7 @@
 spring:
+  web:
+    resources:
+      static-location: file:uploads/
   mail:
     host: smtp.gmail.com
     port: 587
