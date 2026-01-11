@@ -9,7 +9,7 @@ import java.time.Duration
 
 @Component
 @Transactional
-class NotificationEventUserListener(
+class NotificationUserEventListener(
     private val emailService: EmailService
 ) {
     @RabbitListener(queues = [MessageQueues.NOTIFICATION_USER_EVENTS])
