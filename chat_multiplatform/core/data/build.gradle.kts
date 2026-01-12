@@ -32,6 +32,8 @@ kotlin {
     // https://developer.android.com/kotlin/multiplatform/migrate
     val xcfName = "core:dataKit"
 
+    jvm()
+
     iosX64 {
         binaries.framework {
             baseName = xcfName
