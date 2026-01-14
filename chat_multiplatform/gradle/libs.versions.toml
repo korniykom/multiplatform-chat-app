@@ -174,8 +174,8 @@ convention-cmp-application = {id = "com.korniykom.convention.cmp.application", v
 convention-kmp-library = {id = "com.korniykom.convention.kmp.library", version = "unspecified" }
 convention-cmp-library = {id = "com.korniykom.convention.cmp.library", version = "unspecified" }
 convention-cmp-feature = {id = "com.korniykom.convention.cmp.feature", version = "unspecified" }
-convention-buildkonfig = {id = "com.korniykom.convention.buildkonfig"}
-
+convention-buildkonfig = {id = "com.korniykom.convention.buildkonfig", version = "unspecified"}
+convention-room = {id = "com.korniykom.convention.room", version = "unspecified"}
 
 # Android
 android-application = { id = "com.android.application", version.ref = "agp" }
