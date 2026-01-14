@@ -9,6 +9,7 @@ google-services = "4.4.3"
 androidDesugarJdkLibs = "2.1.5"
 androidTools = "31.12.0"
 
+
 # Compose
 compose-hot-reload = "1.0.0-beta04"
 compose-multiplatform = "1.9.0-beta01"
@@ -62,6 +63,10 @@ runner = "1.7.0"
 junit = "1.3.0"
 
 [libraries]
+
+buildkonfig-gradlePlugin = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-gradle-plugin", version.ref = "buildkonfig" }
+buildkonfig-compiler = { group = "com.codingfeline.buildkonfig", name = "buildkonfig-compiler", version.ref = "buildkonfig" }
+
 # Kotlin
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-lifecycle-runtime-ktx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "compose-lifecycle" }
@@ -169,6 +174,7 @@ convention-cmp-application = {id = "com.korniykom.convention.cmp.application", v
 convention-kmp-library = {id = "com.korniykom.convention.kmp.library", version = "unspecified" }
 convention-cmp-library = {id = "com.korniykom.convention.cmp.library", version = "unspecified" }
 convention-cmp-feature = {id = "com.korniykom.convention.cmp.feature", version = "unspecified" }
+convention-buildkonfig = {id = "com.korniykom.convention.buildkonfig"}
 
 
 # Android
