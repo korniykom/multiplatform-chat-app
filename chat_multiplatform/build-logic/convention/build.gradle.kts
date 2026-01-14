@@ -53,5 +53,15 @@ gradlePlugin {
             id = "com.korniykom.convention.kmp.library"
             implementationClass = "KmpLibraryConventionPlugin"
         }
+
+        register("cmpLibrary") {
+            id = "com.korniykom.convention.cmp.library"
+            implementationClass = "CmpLibraryConventionPlugin"
+        }
+
+        register("cmpFeature") {
+            id = "com.korniykom.convention.cmp.feature"
+            implementationClass = "CmpFeatureConventionPlugin"
+        }
     }
 }
