@@ -18,11 +18,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import chat.composeapp.generated.resources.Res
 import chat.composeapp.generated.resources.compose_multiplatform
+import com.korniykom.core.designsystem.theme.ChatTheme
 
 @Composable
 @Preview
 fun App() {
-    MaterialTheme {
+    ChatTheme {
         var showContent by remember { mutableStateOf(false) }
         Column(
             modifier = Modifier

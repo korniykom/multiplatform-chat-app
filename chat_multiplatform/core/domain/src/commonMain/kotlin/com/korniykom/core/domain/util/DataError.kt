@@ -14,7 +14,8 @@ sealed interface DataError: Error {
         PAYLOAD_TOO_LARGE,
         SERVER_ERROR,
         SERVICE_UNAVAILABLE,
-        SERIALIZATION
+        SERIALIZATION,
+        UNKNOWN
     }
     enum class Local: DataError {
         DISK_FULL,
